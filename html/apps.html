@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Applis - PixelPerfect</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="icon" type="image/x-icon" href="../sources/ico/flavico/favicon.ico">
+  <style>
+    /* Styles spécifiques pour la page Applis sans modifier ton CSS principal */
+    .app-category {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--primary);
+      margin-bottom: 8px;
+      display: block;
+    }
+    
+    .card-footer {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #22c55e;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 5px;
+      box-shadow: 0 0 8px #22c55e;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav">
+      <div class="logo">
+        <div class="logo-icon">⬢</div>
+        <span>PixelPerfect</span>
+      </div>
+
+      <button class="burger" id="burger-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav id="nav-links">
+        <a href="../index.html">Accueil</a>
+        <a href="#">Actualités</a>
+        <a href="../html/apps.html">Applis</a>
+        <a href="#">Chat</a>
+        <a href="#">Mon compte</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Nos Applications</h1>
+      <p>Retrouvez ici tous nos outils et applications. 
+         Cliquez sur une carte pour lancer l'application ou voir les détails.
+      </p>
+    </div>
+  </section>
+
+  <section class="sections">
+    
+    <div class="card">
+      <span class="app-category">Multijoueur</span>
+      <h3>🎮 Serveur minecraft</h3>
+      <p>Un serveur minecraft survie avec des tas de plugins amusant. Rejoignez l'aventure !</p>
+      <br>
+      <div class="card-footer">
+        <span class="status-online"><span class="status-dot" style="background: rgb(255, 63, 63); box-shadow: none;"></span> Offline</span>
+        <a href="minecraft-game.html" style="text-decoration: none;">
+          <button class="btn btn-primary" style="padding: 8px 16px;">Rejoindre</button>
+        </a>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="app-category">Multijoueur</span>
+      <h3>🃏 Uno</h3>
+      <p>Un jeu de uno amusant pour jouer entre amis avec un chat intégré au jeu !</p>
+      <br>
+      <div class="card-footer">
+        <span class="status-online"><span class="status-dot"></span> Disponible</span>
+        <a href="uno-game.html" style="text-decoration: none;">
+          <button class="btn btn-primary" style="padding: 8px 16px;">Jouer</button>
+        </a>
+      </div>
+    </div>
+    
+    <div class="card">
+      <span class="app-category">Communication</span>
+      <h3>💬 Chat en ligne</h3>
+      <p>Un chat en ligne sécurisé et anonyme pour discuter avec des amis directement sur le site web.</p>
+      <br>
+      <div class="card-footer">
+        <span class="status-online" style="color: var(--muted);"><span class="status-dot" style="background: orange; box-shadow: none;"></span> En dev</span>
+        <button class="btn btn-secondary" style="padding: 8px 16px;">Bientôt</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="app-category">Utilitaires</span>
+      <h3>☁️ Cloud</h3>
+      <p>Stockez vos fichiers dans le cloud pour un accès sécurisé et rapide.</p>
+      <br>
+      <div class="card-footer">
+        <span class="status-online" style="color: var(--muted);"><span class="status-dot" style="background: orange; box-shadow: none;"></span> En dev</span>
+        <button class="btn btn-secondary" style="padding: 8px 16px;">Bientôt</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="app-category">Multijoueur</span>
+      <h3>🎮 Cookie-clicker</h3>
+      <p>Jouez à un Cookie-clicker en équipe ou tous seuls et soyez le premier en haut du classement !</p>
+      <div class="card-footer">
+        <span class="status-online" style="color: var(--muted);"><span class="status-dot" style="background: orange; box-shadow: none;"></span> En dev</span>
+        <button class="btn btn-secondary" style="padding: 8px 16px;">Bientôt</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="app-category">Multijoueur</span>
+      <h3>📍 Geoguesser du lycée</h3>
+      <p>Jouez à un tout nouveau concept innovant et amusant avec de la compétition.</p>
+      <div class="card-footer">
+        <span class="status-online" style="color: var(--muted);"><span class="status-dot" style="background: orange; box-shadow: none;"></span> En dev</span>
+        <button class="btn btn-secondary" style="padding: 8px 16px;">Bientôt</button>
+      </div>
+    </div>
+
+  </section>
+
+  <footer>© 2026 · PixelPerfect v0.1 — Hosted by PM</footer>
+
+  <script src="../js/script.js"></script>
+</body>
+</html>
