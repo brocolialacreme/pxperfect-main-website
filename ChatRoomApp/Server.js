@@ -5,7 +5,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*", // Autorise toutes les provenances (pratique pour débuter)
+    origin: "*",
     methods: ["GET", "POST"]
   }
 });
