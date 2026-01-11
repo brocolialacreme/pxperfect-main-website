@@ -119,6 +119,15 @@
             window.scrollTo(0, document.body.scrollHeight);
             messages.scrollTop = messages.scrollHeight;
         });
+        socket.on('chat message admin', (msg) => {
+            const item = document.createElement('li');
+            item.textContent = msg;
+            item.style.color = red;
+            messages.appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+            messages.scrollTop = messages.scrollHeight;
+        });
+
     </script>
 </body>
 </html>

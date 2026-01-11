@@ -37,7 +37,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('send_to_all', (msg) => {
-        io.emit('chat message', `(Annonce de ${socket.id}) : ${msg}`);
+        io.emit('chat message admin', `(Annonce de ${socket.id}) : ${msg}`);
     });
 
     socket.on('chuchoter', (msg) => {
