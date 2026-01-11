@@ -3,7 +3,12 @@ const http = require('http');
 const { Server } = require('socket.io');
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: "*", // Autorise toutes les provenances (pratique pour débuter)
+    methods: ["GET", "POST"]
+  }
+});
 
 app.use(express.static(__dirname));
 
@@ -41,6 +46,6 @@ io.on('connection', (socket) => {
 });
 
 const PORT = 3000;
-server.listen(PORT, () => {
-    console.log(`Serveur lancé sur : http://localhost:${PORT}`);
+server.listen(PORT, '0.0.0.0', () => {
+    console.log(`Serveur accessible sur le port ${PORT}`);
 });
