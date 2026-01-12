@@ -27,7 +27,15 @@
         <a href="#">Actualités</a>
         <a href="html/apps.html">Applis</a>
         <a href="#">Chat</a>
-        <a href="#">Mon compte</a>
+        <nav id="nav-links">
+          <script>
+            if (document.cookie.includes("authentik_proxy")) {
+                document.write('<a href="html/mon-compte.html">Mon Compte</a>');
+            } else {
+                document.write('<a href="html/login.html">Connexion</a>');
+            }
+          </script>
+        </nav>
       </nav>
     </div>
   </header>
