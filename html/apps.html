@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="icon" type="image/x-icon" href="../sources/ico/flavico/favicon.ico">
   <style>
-    /* Styles spécifiques pour la page Applis sans modifier ton CSS principal */
+    /* Styles spécifiques pour la page Applis */
     .app-category {
       font-size: 10px;
       text-transform: uppercase;
@@ -33,6 +33,13 @@
       margin-right: 5px;
       box-shadow: 0 0 8px #22c55e;
     }
+
+    /* Style pour les boutons désactivés visuellement */
+    .btn-locked {
+      filter: grayscale(1);
+      opacity: 0.6;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -55,7 +62,7 @@
         <a href="#">Actualités</a>
         <a href="../html/apps.html">Applis</a>
         <a href="#">Chat</a>
-        <a href="#">Mon compte</a>
+        <a href="../html/login.html" id="auth-nav-link">Connexion</a>
       </nav>
     </div>
   </header>
@@ -64,7 +71,7 @@
     <div class="hero-content">
       <h1>Nos Applications</h1>
       <p>Retrouvez ici tous nos outils et applications. 
-         Cliquez sur une carte pour lancer l'application ou voir les détails.
+          Cliquez sur une carte pour lancer l'application ou voir les détails.
       </p>
     </div>
   </section>
@@ -78,7 +85,7 @@
       <br>
       <div class="card-footer">
         <span class="status-online"><span class="status-dot" style="background: rgb(255, 63, 63); box-shadow: none;"></span> Offline</span>
-        <a href="minecraft-game.html" style="text-decoration: none;">
+        <a href="minecraft-game.html" class="auth-link" style="text-decoration: none;">
           <button class="btn btn-primary" style="padding: 8px 16px;">Rejoindre</button>
         </a>
       </div>
@@ -91,7 +98,7 @@
       <br>
       <div class="card-footer">
         <span class="status-online"><span class="status-dot"></span> Disponible</span>
-        <a href="uno-game.html" style="text-decoration: none;">
+        <a href="uno-game.html" class="auth-link" style="text-decoration: none;">
           <button class="btn btn-primary" style="padding: 8px 16px;">Jouer</button>
         </a>
       </div>
@@ -104,8 +111,8 @@
       <br>
       <div class="card-footer">
         <span class="status-online"><span class="status-dot"></span> Disponible</span>
-        <a href="../ChatRoomApp/main.html" style="text-decoration: none;">
-          <button class="btn btn-primary" style="padding: 8px 16px;">Jouer</button>
+        <a href="#" class="auth-link" style="text-decoration: none;">
+          <button class="btn btn-primary" style="padding: 8px 16px;">Discuter</button>
         </a>
       </div>
     </div>
@@ -126,7 +133,7 @@
       <h3>🎮 Cookie-clicker</h3>
       <p>Jouez à un Cookie-clicker en équipe ou tous seuls et soyez le premier en haut du classement !</p>
       <div class="card-footer">
-        <span class="status-online" style="color: var(--muted);"><span class="status-dot" style="background: orange; box-shadow: none;"></span> En dev</span>
+        <span class="status-online" style="color: var(--muted);"><span class="status-dot" style="background: orange; box-shadow: none;"></span> En attente de déploiement</span>
         <button class="btn btn-secondary" style="padding: 8px 16px;">Bientôt</button>
       </div>
     </div>
@@ -146,5 +153,32 @@
   <footer>© 2026 · PixelPerfect v0.1 — Hosted by PM</footer>
 
   <script src="../js/script.js"></script>
+
+  <script>
+    // --- GESTION DE L'AUTHENTIFICATION DYNAMIQUE ---
+    document.addEventListener('DOMContentLoaded', () => {
+      const isLoggedIn = document.cookie.includes("authentik_proxy");
+      const navLink = document.getElementById('auth-nav-link');
+      const authLinks = document.querySelectorAll('.auth-link');
+
+      if (isLoggedIn) {
+        // 1. Modifier le lien du menu
+        navLink.innerText = "Mon compte";
+        navLink.href = "https://authentik.pxperfect.fr/if/user/#/settings";
+      } else {
+        // 2. Si pas connecté, intercepter les clics sur les boutons de jeux
+        authLinks.forEach(link => {
+          const button = link.querySelector('button');
+          button.classList.add('btn-locked');
+          
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Redirection vers ton URL de login Traefik
+            window.location.href = "/login";
+          });
+        });
+      }
+    });
+  </script>
 </body>
 </html>
