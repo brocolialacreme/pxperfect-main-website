@@ -27,15 +27,13 @@
         <a href="#">Actualités</a>
         <a href="html/apps.html">Applis</a>
         <a href="#">Chat</a>
-        <nav id="nav-links">
-          <script>
-            if (document.cookie.includes("authentik_proxy")) {
-                document.write('<a href="html/myaccount.html">Mon Compte</a>');
-            } else {
-                document.write('<a href="html/login.html">Connexion</a>');
-            }
-          </script>
-        </nav>
+        <script>
+          if (document.cookie.includes("authentik_proxy")) {
+              document.write('<a href="html/myaccount.html">Mon Compte</a>');
+          } else {
+              document.write('<a href="html/login.html">Connexion</a>');
+          }
+        </script>
       </nav>
     </div>
   </header>

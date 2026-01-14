@@ -39,6 +39,7 @@
       filter: grayscale(1);
       opacity: 0.6;
       cursor: pointer;
+      pointer-events: none;
     }
   </style>
 </head>
@@ -98,7 +99,7 @@
       <br>
       <div class="card-footer">
         <span class="status-online"><span class="status-dot"></span> Disponible</span>
-        <a href="uno-game.html" class="auth-link" style="text-decoration: none;">
+        <a href="uno-game.html" style="text-decoration: none;">
           <button class="btn btn-primary" style="padding: 8px 16px;">Jouer</button>
         </a>
       </div>
@@ -155,30 +156,18 @@
   <script src="../js/script.js"></script>
 
   <script>
-    // --- GESTION DE L'AUTHENTIFICATION DYNAMIQUE ---
     document.addEventListener('DOMContentLoaded', () => {
       const isLoggedIn = document.cookie.includes("authentik_proxy");
       const navLink = document.getElementById('auth-nav-link');
-      const authLinks = document.querySelectorAll('.auth-link');
 
-      if (isLoggedIn) {
-        // 1. Modifier le lien du menu
+      // On change juste le menu de navigation
+      if (isLoggedIn && navLink) {
         navLink.innerText = "Mon compte";
         navLink.href = "https://authentik.pxperfect.fr/if/user/#/settings";
-      } else {
-        // 2. Si pas connecté, intercepter les clics sur les boutons de jeux
-        authLinks.forEach(link => {
-          const button = link.querySelector('button');
-          button.classList.add('btn-locked');
-          
-          link.addEventListener('click', (e) => {
-            e.preventDefault();
-            // Redirection vers ton URL de login Traefik
-            window.location.href = "/login";
-          });
-        });
       }
-    });
+      // On ne touche plus aux boutons des jeux ici, la sécurité est gérée 
+      // directement sur la page de destination (ex: uno-game.html)
+  });
   </script>
 </body>
 </html>
