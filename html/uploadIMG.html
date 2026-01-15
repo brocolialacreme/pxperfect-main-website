@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../sources/ico/flavico/favicon.ico">
+    <title>Upload - IMG - Geoguesser</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f1420 0%, #1a1f35 100%);
+            color: #e1e8f0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .logo-icon {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #4facfe;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: #9ca3af;
+            margin-bottom: 40px;
+            font-size: 16px;
+        }
+
+        .form-card {
+            background: rgba(26, 31, 53, 0.6);
+            border: 1px solid rgba(79, 172, 254, 0.2);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #e1e8f0;
+            font-weight: 500;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .upload-area {
+            border: 2px dashed rgba(79, 172, 254, 0.4);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(15, 20, 32, 0.5);
+        }
+
+        .upload-area:hover {
+            border-color: #4facfe;
+            background: rgba(79, 172, 254, 0.1);
+        }
+
+        .upload-area.dragover {
+            border-color: #00f2fe;
+            background: rgba(79, 172, 254, 0.2);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            color: #9ca3af;
+            margin-bottom: 10px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 15px;
+            background: rgba(15, 20, 32, 0.8);
+            border: 1px solid rgba(79, 172, 254, 0.3);
+            border-radius: 8px;
+            color: #e1e8f0;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.3s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .plans-section {
+            margin-top: 40px;
+        }
+
+        .plans-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #e1e8f0;
+        }
+
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .plan-card {
+            background: rgba(26, 31, 53, 0.6);
+            border: 1px solid rgba(79, 172, 254, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-5px);
+            border-color: #4facfe;
+            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.3);
+        }
+
+        .plan-image {
+            width: 100%;
+            height: 200px;
+            background: rgba(79, 172, 254, 0.1);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+        }
+
+        .plan-label {
+            font-weight: 600;
+            color: #4facfe;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 36px;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .coordinate-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <span>⬢ PixelPerfect</span>
+        </div>
+        <div class="nav-links">
+            <a href="../index.html">Accueil</a>
+            <a href="./apps.html">Applis</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Proposer une Image</h1>
+        <p class="subtitle">Contribuez au Geoguesser du lycée en soumettant vos photos avec leur localisation.</p>
+
+        <div class="form-card">
+            <form id="imageForm">
+                <div class="form-group">
+                    <label>📸 Photo du lieu</label>
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">⬆️</div>
+                        <div class="upload-text">Cliquez ou glissez votre photo ici</div>
+                        <small style="color: #6b7280;">Formats acceptés: JPG, PNG (max 10MB)</small>
+                    </div>
+                    <input type="file" id="fileInput" accept="image/*" required>
+                    <img id="preview" class="preview-image" style="display: none;">
+                </div>
+
+                <div class="form-group">
+                    <label>📍 Position (Coordonnées)</label>
+                    <div class="coordinate-inputs">
+                        <input type="number" id="latitude" placeholder="Latitude (PAS DE ',')" step="0.0001" required>
+                        <input type="number" id="longitude" placeholder="Longitude (ex: PAS DE ',')" step="0.0001" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>🏢 Étage</label>
+                    <select id="etage" required>
+                        <option value="">Sélectionnez un étage</option>
+                        <option value="0">Rez-de-chaussée</option>
+                        <option value="1">1er étage</option>
+                        <option value="2">2ème étage</option>
+                        <option value="3">3ème étage</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="submit-btn">Soumettre la photo</button>
+            </form>
+        </div>
+
+        <div class="plans-section">
+            <h2 class="plans-title">Plans des étages</h2>
+            <p class="subtitle">Cliquez sur un plan pour l'agrandir</p>
+            
+            <div class="plans-grid">
+                <div class="plan-card" onclick="openModal(0)">
+                    <div class="plan-image">🗺️</div>
+                    <div class="plan-label">Rez-de-chaussée</div>
+                </div>
+                <div class="plan-card" onclick="openModal(1)">
+                    <div class="plan-image">🗺️</div>
+                    <div class="plan-label">1er étage</div>
+                </div>
+                <div class="plan-card" onclick="openModal(2)">
+                    <div class="plan-image">🗺️</div>
+                    <div class="plan-label">2ème étage</div>
+                </div>
+                <div class="plan-card" onclick="openModal(3)">
+                    <div class="plan-image">🗺️</div>
+                    <div class="plan-label">3ème étage</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <div class="plan-image" style="width: 800px; height: 600px; font-size: 120px;">🗺️</div>
+        </div>
+    </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const preview = document.getElementById('preview');
+        const form = document.getElementById('imageForm');
+        const modal = document.getElementById('modal');
+
+        uploadArea.addEventListener('click', () => fileInput.click());
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                handleFileSelect(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileSelect(e.target.files[0]);
+            }
+        });
+
+        function handleFileSelect(file) {
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                file: fileInput.files[0]?.name,
+                latitude: document.getElementById('latitude').value,
+                longitude: document.getElementById('longitude').value,
+                etage: document.getElementById('etage').value
+            };
+
+            console.log('Formulaire soumis:', formData);
+            
+            alert('✅ Photo soumise avec succès !\n\n' + 
+                  'Fichier: ' + formData.file + '\n' +
+                  'Position: ' + formData.latitude + ', ' + formData.longitude + '\n' +
+                  'Étage: ' + formData.etage);
+            
+            form.reset();
+            preview.style.display = 'none';
+        });
+
+        function openModal(floor) {
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+        }
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
