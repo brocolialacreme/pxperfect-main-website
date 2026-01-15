@@ -1,0 +1,27 @@
+{
+  "dependencies": {
+    "emailjs-com": "^3.2.0",
+    "express": "^5.2.1",
+    "multer": "^2.0.2",
+    "nodemailer": "^7.0.12"
+  },
+  "name": "pxperfect-main-website",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brocolialacreme/pxperfect-main-website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/brocolialacreme/pxperfect-main-website/issues"
+  },
+  "homepage": "https://github.com/brocolialacreme/pxperfect-main-website#readme"
+}

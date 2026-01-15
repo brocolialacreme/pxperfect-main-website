@@ -303,7 +303,7 @@
                     <div class="upload-area" id="uploadArea">
                         <div class="upload-icon">⬆️</div>
                         <div class="upload-text">Cliquez ou glissez votre photo ici</div>
-                        <small style="color: #6b7280;">Formats acceptés: JPG, PNG (max 10MB)</small>
+                        <small style="color: #6b7280;">Formats acceptés: JPG, PNG</small>
                     </div>
                     <input type="file" id="fileInput" accept="image/*" required>
                     <img id="preview" class="preview-image" style="display: none;">
@@ -364,85 +364,107 @@
         </div>
     </div>
 
-    <script>
-        const uploadArea = document.getElementById('uploadArea');
-        const fileInput = document.getElementById('fileInput');
-        const preview = document.getElementById('preview');
-        const form = document.getElementById('imageForm');
-        const modal = document.getElementById('modal');
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+    (function(){
+        emailjs.init("gUZrwzNQHIT_hcjAa");
+    })();
 
-        uploadArea.addEventListener('click', () => fileInput.click());
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const preview = document.getElementById('preview');
+    const form = document.getElementById('imageForm');
+    const modal = document.getElementById('modal');
 
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.classList.add('dragover');
-        });
+    const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dt4pqmrtq/image/upload";
+    const CLOUDINARY_UPLOAD_PRESET = "PXperfect_IMG_geogussr";
 
-        uploadArea.addEventListener('dragleave', () => {
-            uploadArea.classList.remove('dragover');
-        });
+    async function uploadImage(file) {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
 
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.classList.remove('dragover');
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                fileInput.files = files;
-                handleFileSelect(files[0]);
-            }
-        });
-
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                handleFileSelect(e.target.files[0]);
-            }
-        });
-
-        function handleFileSelect(file) {
-            if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            }
+        try {
+            const response = await fetch(CLOUDINARY_URL, {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            return data.secure_url; 
+        } catch (error) {
+            return null;
         }
+    }
 
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const formData = {
-                file: fileInput.files[0]?.name,
-                latitude: document.getElementById('latitude').value,
-                longitude: document.getElementById('longitude').value,
-                etage: document.getElementById('etage').value
+    function sendMail(imgUrl, stage, position){
+        return emailjs.send(
+            "service_spkwdiw",
+            "template_b48yshx", 
+            {
+                name: "PXperfect",
+                email: "contact.pxperfect@gmail.com",
+                message: `Étage: ${stage}\nPosition: ${position}\nImage: ${imgUrl}`
+            }
+        );
+    };
+
+
+    uploadArea.addEventListener('click', () => fileInput.click());
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+    });
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('dragover');
+    });
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            fileInput.files = files;
+            handleFileSelect(files[0]);
+        }
+    });
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            handleFileSelect(e.target.files[0]);
+        }
+    });
+    function handleFileSelect(file) {
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
             };
-
-            console.log('Formulaire soumis:', formData);
-            
-            alert('✅ Photo soumise avec succès !\n\n' + 
-                  'Fichier: ' + formData.file + '\n' +
-                  'Position: ' + formData.latitude + ', ' + formData.longitude + '\n' +
-                  'Étage: ' + formData.etage);
-            
-            form.reset();
-            preview.style.display = 'none';
-        });
-
-        function openModal(floor) {
-            modal.classList.add('active');
+            reader.readAsDataURL(file);
         }
-
-        function closeModal() {
-            modal.classList.remove('active');
+    }
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const file = fileInput.files[0];
+        if (!file) {
+            alert("❌ Veuillez sélectionner une image.");
+            return;
         }
+        const formData = {
+            latitude: document.getElementById('latitude').value,
+            longitude: document.getElementById('longitude').value,
+            etage: document.getElementById('etage').value
+        };
+        const imgUrl = await uploadImage(file);
+        if (!imgUrl) return;
+        sendMail(imgUrl, formData.etage, [formData.latitude, formData.longitude]);
+        alert(`✅ Photo soumise avec succès !\n\nFichier: ${file.name}\nPosition: ${formData.latitude}, ${formData.longitude}\nÉtage: ${formData.etage}`);
+        form.reset();
+        preview.style.display = 'none';
+    });
 
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                closeModal();
-            }
-        });
-    </script>
+    function openModal(floor) { modal.classList.add('active'); }
+    function closeModal() { modal.classList.remove('active'); }
+    modal.addEventListener('click', (e) => { if(e.target === modal) closeModal(); });
+</script>
+
 </body>
 </html>
