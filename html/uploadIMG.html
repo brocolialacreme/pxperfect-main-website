@@ -364,20 +364,28 @@
         </div>
     </div>
 
+
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>
     (function(){
         emailjs.init("gUZrwzNQHIT_hcjAa");
     })();
-
     const uploadArea = document.getElementById('uploadArea');
     const fileInput = document.getElementById('fileInput');
     const preview = document.getElementById('preview');
     const form = document.getElementById('imageForm');
     const modal = document.getElementById('modal');
-
     const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dt4pqmrtq/image/upload";
     const CLOUDINARY_UPLOAD_PRESET = "PXperfect_IMG_geogussr";
+    const floorPlans = [
+        "../sources/plans/rdc.png",
+        "../sources/plans/etage1.png",
+        "../sources/plans/etage2.png",
+        "../sources/plans/etage3.png"
+    ];
+    let planImage = null;
+    let ping = null;
+    let coordinatesDisplay = null;
 
     async function uploadImage(file) {
         const formData = new FormData();
@@ -390,8 +398,9 @@
                 body: formData
             });
             const data = await response.json();
-            return data.secure_url; 
+            return data.secure_url;
         } catch (error) {
+            console.error("Upload error:", error);
             return null;
         }
     }
@@ -399,15 +408,14 @@
     function sendMail(imgUrl, stage, position){
         return emailjs.send(
             "service_spkwdiw",
-            "template_b48yshx", 
+            "template_b48yshx",
             {
                 name: "PXperfect",
                 email: "contact.pxperfect@gmail.com",
                 message: `Étage: ${stage}\nPosition: ${position}\nImage: ${imgUrl}`
             }
         );
-    };
-
+    }
 
     uploadArea.addEventListener('click', () => fileInput.click());
     uploadArea.addEventListener('dragover', (e) => {
@@ -420,27 +428,29 @@
     uploadArea.addEventListener('drop', (e) => {
         e.preventDefault();
         uploadArea.classList.remove('dragover');
-        const files = e.dataTransfer.files;
-        if (files.length > 0) {
-            fileInput.files = files;
-            handleFileSelect(files[0]);
+        if (e.dataTransfer.files.length > 0) {
+            fileInput.files = e.dataTransfer.files;
+            handleFileSelect(e.dataTransfer.files[0]);
         }
     });
+
     fileInput.addEventListener('change', (e) => {
         if (e.target.files.length > 0) {
             handleFileSelect(e.target.files[0]);
         }
     });
+
     function handleFileSelect(file) {
-        if (file && file.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                preview.src = e.target.result;
-                preview.style.display = 'block';
-            };
-            reader.readAsDataURL(file);
-        }
+        if (!file.type.startsWith('image/')) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
     }
+
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const file = fileInput.files[0];
@@ -448,23 +458,82 @@
             alert("❌ Veuillez sélectionner une image.");
             return;
         }
-        const formData = {
-            latitude: document.getElementById('latitude').value,
-            longitude: document.getElementById('longitude').value,
-            etage: document.getElementById('etage').value
-        };
+        const latitude = document.getElementById('latitude').value;
+        const longitude = document.getElementById('longitude').value;
+        const etage = document.getElementById('etage').value;
         const imgUrl = await uploadImage(file);
-        if (!imgUrl) return;
-        sendMail(imgUrl, formData.etage, [formData.latitude, formData.longitude]);
-        alert(`✅ Photo soumise avec succès !\n\nFichier: ${file.name}\nPosition: ${formData.latitude}, ${formData.longitude}\nÉtage: ${formData.etage}`);
+        if (!imgUrl) {
+            alert("❌ Erreur lors de l'upload.");
+            return;
+        }
+        await sendMail(imgUrl, etage, `[${latitude}, ${longitude}]`);
+        alert(`✅ Photo soumise avec succès !
+                Fichier : ${file.name}
+                Position : ${latitude}, ${longitude}
+                Étage : ${etage}`);
         form.reset();
         preview.style.display = 'none';
     });
 
-    function openModal(floor) { modal.classList.add('active'); }
-    function closeModal() { modal.classList.remove('active'); }
-    modal.addEventListener('click', (e) => { if(e.target === modal) closeModal(); });
+
+    function openModal(floor) {
+        modal.classList.add('active');
+        const modalContent = modal.querySelector('.modal-content');
+        modalContent.innerHTML = `
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <div class="plan-wrapper" style="position:relative;">
+                <img id="planImage" src="${floorPlans[floor]}" class="modal-image">
+                <div id="ping" style="
+                    position:absolute;
+                    width:16px;
+                    height:16px;
+                    background:#ff4d4d;
+                    border-radius:50%;
+                    transform:translate(-50%,-50%);
+                    display:none;
+                    box-shadow:0 0 10px rgba(255,77,77,0.8);
+                "></div>
+            </div>
+            <div id="coordinatesDisplay" style="
+                margin-top:15px;
+                padding:12px;
+                background:rgba(15,20,32,0.8);
+                border:1px solid rgba(79,172,254,0.3);
+                border-radius:8px;
+                font-family:monospace;
+                color:#4facfe;
+                text-align:center;
+            ">
+                Cliquez sur le plan pour obtenir les coordonnées
+            </div>
+        `;
+        planImage = document.getElementById('planImage');
+        ping = document.getElementById('ping');
+        coordinatesDisplay = document.getElementById('coordinatesDisplay');
+        planImage.addEventListener('click', handlePlanClick);
+    }
+    function closeModal() {
+        modal.classList.remove('active');
+    }
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+
+
+    function handlePlanClick(e) {
+        const rect = planImage.getBoundingClientRect();
+
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+        ping.style.left = `${x}`;
+        ping.style.top = `${y}`;
+        ping.style.display = "block";
+
+        coordinatesDisplay.textContent = `X: ${x.toFixed(2)}% | Y: ${y.toFixed(2)}%`;
+    }
 </script>
+
 
 </body>
 </html>
