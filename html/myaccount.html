@@ -1,228 +1,127 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mon Profil - PixelPerfect</title>
-  <link rel="stylesheet" href="../css/style.css" />
-  <link rel="icon" type="image/x-icon" href="../sources/ico/flavico/favicon.ico">
-  <style>
-    :root {
-      --card-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
-      --border: rgba(255, 255, 255, 0.1);
-    }
-
-    .account-grid {
-      display: grid;
-      grid-template-columns: 350px 1fr;
-      gap: 30px;
-      max-width: 1200px;
-      margin: 80px auto;
-      padding: 0 24px;
-    }
-
-    /* Profil Sidebar */
-    .profile-sidebar {
-      background: var(--card-bg);
-      backdrop-filter: blur(15px);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 40px 30px;
-      text-align: center;
-      height: fit-content;
-    }
-
-    .avatar-wrapper {
-      position: relative;
-      width: 120px;
-      height: 120px;
-      margin: 0 auto 20px;
-    }
-
-    .avatar-circle {
-      width: 100%; height: 100%;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 48px; color: #0b0f1a; font-weight: 800;
-      box-shadow: 0 0 30px rgba(94, 231, 255, 0.2);
-    }
-
-    .status-badge {
-      position: absolute; bottom: 5px; right: 5px;
-      width: 25px; height: 25px;
-      background: #22c55e; border: 4px solid #0b0f1a;
-      border-radius: 50%;
-    }
-
-    /* Main Dashboard */
-    .dashboard-main { display: flex; flex-direction: column; gap: 30px; }
-
-    .glass-card {
-      background: var(--card-bg);
-      backdrop-filter: blur(15px);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 30px;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 20px;
-      margin-top: 20px;
-    }
-
-    .stat-box {
-      background: rgba(255, 255, 255, 0.03);
-      padding: 20px; border-radius: 18px; text-align: center;
-      border: 1px solid transparent; transition: 0.3s;
-    }
-    .stat-box:hover { border-color: var(--primary); background: rgba(94, 231, 255, 0.05); }
-
-    .stat-val { display: block; font-size: 24px; font-weight: bold; color: var(--primary); }
-    .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; }
-
-    /* Info List */
-    .info-list { margin: 20px 0; }
-    .info-row {
-      display: flex; justify-content: space-between; padding: 15px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-    .info-row:last-child { border-bottom: none; }
-    
-    .btn-logout {
-      background: rgba(255, 63, 63, 0.1); border: 1px solid rgba(255, 63, 63, 0.2);
-      color: #ff3f3f; width: 100%; padding: 12px; border-radius: 12px;
-      cursor: pointer; transition: 0.3s; margin-top: 20px;
-    }
-    .btn-logout:hover { background: #ff3f3f; color: white; }
-
-    @media (max-width: 900px) {
-      .account-grid { grid-template-columns: 1fr; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Profil - PixelPerfect</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .profile-container {
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 24px;
+        }
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .avatar-large {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: var(--bg);
+            font-weight: bold;
+        }
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+        .label { color: var(--muted); }
+        .value { color: var(--primary); font-family: monospace; }
+        .loading-screen {
+            position: fixed; top:0; left:0; width:100%; height:100%;
+            background: var(--bg); display: flex; flex-direction: column;
+            align-items: center; justify-content: center; z-index: 1000;
+        }
+    </style>
 </head>
 <body>
 
-  <header>
-    <div class="nav">
-      <div class="logo">
-        <div class="logo-icon">⬢</div>
-        <span>PixelPerfect</span>
-      </div>
-      <nav id="nav-links">
-        <a href="../index.html">Accueil</a>
-        <a href="apps.html">Applis</a>
-        <a href="myaccount.html" class="active">Mon Compte</a>
-      </nav>
+    <div id="loader" class="loading-screen">
+        <div class="construction-text">VERIFICATION...</div>
+        <div class="loader-line"></div>
     </div>
-  </header>
 
-  <div class="account-grid">
-    <aside class="profile-sidebar">
-      <div class="avatar-wrapper">
-        <div class="avatar-circle" id="user-initial">?</div>
-        <div class="status-badge"></div>
-      </div>
-      <h2 id="display-name" style="margin-bottom: 5px;">Chargement...</h2>
-      <p id="user-role" style="color: var(--primary); font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Membre Verified</p>
-      
-      <div class="info-list">
-        <div class="info-row">
-          <span style="color:var(--muted)">Pseudo</span>
-          <span id="username-val">...</span>
+    <header>
+        <div class="nav">
+            <div class="logo"><div class="logo-icon">⬢</div><span>PixelPerfect</span></div>
+            <nav>
+                <a href="../index.html">Accueil</a>
+                <a href="apps.html">Applis</a>
+                <a href="#" onclick="logout()">Déconnexion</a>
+            </nav>
         </div>
-        <div class="info-row">
-          <span style="color:var(--muted)">Langue</span>
-          <span>Français</span>
-        </div>
-      </div>
+    </header>
 
-      <a href="https://authentik.pxperfect.fr" style="text-decoration: none;">
-        <button class="btn btn-primary" style="width: 100%;">Éditer le profil</button>
-      </a>
-      
-      <a href="https://authentik.pxperfect.fr/if/flow/default-invalidation-flow/">
-        <button class="btn-logout">Déconnexion</button>
-      </a>
-    </aside>
-
-    <main class="dashboard-main">
-      <div class="glass-card">
-        <h3 id="greeting">Bonjour !</h3>
-        <p style="color: var(--muted);">Heureux de vous revoir sur votre espace PixelPerfect. Voici l'état de vos services.</p>
-        
-        <div class="stats-grid">
-          <div class="stat-box">
-            <span class="stat-val">3</span>
-            <span class="stat-label">Jeux Actifs</span>
-          </div>
-          <div class="stat-box">
-            <span class="stat-val">En ligne</span>
-            <span class="stat-label">Minecraft</span>
-          </div>
-          <div class="stat-box">
-            <span class="stat-val">Stable</span>
-            <span class="stat-label">Connexion</span>
-          </div>
+    <main class="profile-container" id="profile-content" style="display: none;">
+        <div class="profile-header">
+            <div class="avatar-large" id="user-initial">-</div>
+            <div>
+                <h1 id="user-name">Chargement...</h1>
+                <p id="user-email" style="color: var(--muted)"></p>
+            </div>
         </div>
-      </div>
 
-      <div class="glass-card">
-        <h3>Informations de sécurité</h3>
-        <div class="info-list">
-          <div class="info-row">
-            <span>Email de contact</span>
-            <span id="email-val">...@...</span>
-          </div>
-          <div class="info-row">
-            <span>Double Auth (MFA)</span>
-            <span style="color: #22c55e;">Activé</span>
-          </div>
-          <div class="info-row">
-            <span>Dernière connexion</span>
-            <span id="last-login">Aujourd'hui</span>
-          </div>
+        <section class="card">
+            <h3>Détails du compte</h3>
+            <div class="data-row"><span class="label">ID Utilisateur</span><span class="value" id="user-id">...</span></div>
+            <div class="data-row"><span class="label">Pseudo</span><span class="value" id="user-username">...</span></div>
+            <div class="data-row"><span class="label">Statut session</span><span class="value" style="color: #22c55e;">Connecté</span></div>
+        </section>
+
+        <br>
+        <div class="buttons">
+            <a href="https://authentik.pxperfect.fr" class="btn btn-secondary">Gérer sur Authentik</a>
         </div>
-      </div>
     </main>
-  </div>
 
-  <footer>© 2026 · PixelPerfectv1.0 — Hosted by PM - Dashboard Sécurisé</footer>
+    <script>
+        async function checkAuth() {
+            const currentUrl = window.location.href;
+            // On essaie de récupérer les infos de l'utilisateur
+            try {
+                const response = await fetch('https://authentik.pxperfect.fr/application/o/userinfo/');
+                
+                if (!response.ok) throw new Error("Non autorisé");
 
-  <script>
-    async function initAccount() {
-      // 1. Salutation dynamique
-      const hour = new Date().getHours();
-      const greeting = hour < 18 ? "Bonjour, " : "Bonsoir, ";
-      
-      try {
-        // 2. Récupération des données Authentik
-        const response = await fetch('https://authentik.pxperfect.fr/application/o/userinfo/');
-        if (!response.ok) throw new Error();
-        const data = await response.json();
+                const data = await response.json();
+                
+                // Remplissage des données
+                document.getElementById('user-name').innerText = data.name || data.preferred_username;
+                document.getElementById('user-email').innerText = data.email;
+                document.getElementById('user-username').innerText = data.preferred_username;
+                document.getElementById('user-id').innerText = data.sub;
+                document.getElementById('user-initial').innerText = (data.name || "U").charAt(0).toUpperCase();
 
-        const name = data.name || data.preferred_username;
-        
-        // 3. Injection dans le HTML
-        document.getElementById('greeting').innerText = greeting + name + " !";
-        document.getElementById('display-name').innerText = name;
-        document.getElementById('username-val').innerText = data.preferred_username;
-        document.getElementById('email-val').innerText = data.email;
-        document.getElementById('user-initial').innerText = name.charAt(0).toUpperCase();
+                // Affichage du contenu
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('profile-content').style.display = 'block';
 
-        // Si l'utilisateur est admin (optionnel si tu as des groupes)
-        if (data.groups && data.groups.includes('authentik Admins')) {
-            document.getElementById('user-role').innerText = "Administrateur";
+            } catch (err) {
+                console.log("Redirection vers login...");
+                // CONFIGURATION CRUCIALE : Le paramètre next doit être l'URL COMPLETE
+                const loginUrl = `https://authentik.pxperfect.fr/start?next=${encodeURIComponent(currentUrl)}`;
+                window.location.href = loginUrl;
+            }
         }
 
-      } catch (e) {
-        window.location.href = "/login";
-      }
-    }
+        function logout() {
+            window.location.href = "https://authentik.pxperfect.fr/if/flow/default-invalidation-flow/";
+        }
 
-    document.addEventListener('DOMContentLoaded', initAccount);
-  </script>
+        document.addEventListener('DOMContentLoaded', checkAuth);
+    </script>
 </body>
 </html>
