@@ -3,52 +3,47 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Uno Online - PixelPerfect</title>
+  <title>PixelPerfect - UNO</title>
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="icon" type="image/x-icon" href="../sources/ico/flavico/favicon.ico">
   <style>
-    /* Styles spécifiques pour la superposition (overlay) */
-    .game-container {
-      position: relative;
-      width: 100%;
-      height: 80vh;
-      margin-top: 20px;
-      border-radius: 16px;
-      overflow: hidden;
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+    .fullscreen-link-container {
+      text-align: right;
+      margin-top: 15px;
+      padding-right: 5px;
     }
 
-    .locked-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+    .fullscreen-link {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      display: inline-flex;
       align-items: center;
-      background: rgba(0, 0, 0, 0.7);
-      z-index: 10;
+      gap: 8px;
+      opacity: 0.7;
+    }
+
+    .fullscreen-link:hover {
+      color: var(--primary);
+      opacity: 1;
+      text-shadow: 0 0 8px rgba(94, 231, 255, 0.4);
+    }
+
+    .fullscreen-link::before {
+      content: '↗';
+      font-size: 14px;
+    }
+
+    /* Style pour la carte de verrouillage */
+    .locked-card {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+      border: 1px solid var(--secondary);
+      border-radius: 18px;
+      padding: 60px 20px;
       text-align: center;
-      padding: 20px;
-    }
-
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-
-    .auth-card {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 40px;
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(20px);
-      max-width: 400px;
     }
   </style>
 </head>
@@ -56,10 +51,10 @@
 
   <header>
     <div class="nav">
-      <a href="../index.html" class="logo" style="text-decoration: none;">
+      <div class="logo">
         <div class="logo-icon">⬢</div>
         <span>PixelPerfect</span>
-      </a>
+      </div>
 
       <button class="burger" id="burger-menu">
         <span></span>
@@ -69,64 +64,66 @@
 
       <nav id="nav-links">
         <a href="../index.html">Accueil</a>
+        <a href="#">Actualités</a>
         <a href="apps.html">Applis</a>
-        <script>
-          // Affichage dynamique du bouton compte/connexion
-          if (document.cookie.includes("authentik_proxy")) {
-              document.write('<a href="myaccount.html">Mon Compte</a>');
-          } else {
-              document.write('<a href="https://authentik.pxperfect.fr/start?next=/html/uno-game.html">Connexion</a>');
-          }
-        </script>
+        <a href="#">Chat</a>
+        <a id="auth-header-link" href="/login">Connexion</a>
       </nav>
     </div>
   </header>
 
-  <main class="container" style="margin-top: 100px;">
-    <section class="hero">
-      <h1 class="gradient-text">Uno Online</h1>
-      <p>Affrontez vos amis dans des parties endiablées.</p>
-    </section>
+  <section class="hero" style="padding-bottom: 20px;">
+    <div class="hero-content">
+      <h1>UNO Multiplayer</h1>
+      <p>Affrontez vos amis dans une partie endiablée directement dans votre navigateur sur PixelPerfect.</p>
+    </div>
+  </section>
 
-    <div class="game-container" id="game-wrapper">
+  <div id="uno-content-area" style="width: 100%; max-width: 1200px; margin: 0 auto 100px auto; padding: 0 24px;">
       </div>
-  </main>
 
+  <footer>© 2026 · PixelPerfect v1.0 — Hosted by PM - contact.pxperfect@gmail.com</footer>
+
+  <script src="../js/script.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const gameWrapper = document.getElementById('game-wrapper');
-      
-      // VERIFICATION DU COOKIE (Assure-toi que le domaine est pxperfect.fr dans Authentik)
+      const contentArea = document.getElementById('uno-content-area');
+      const authLink = document.getElementById('auth-header-link');
       const isLoggedIn = document.cookie.includes("authentik_proxy");
 
       if (isLoggedIn) {
-        // L'utilisateur est connecté : on affiche l'iframe du jeu
-        gameWrapper.innerHTML = `
-          <iframe src="https://uno.pxperfect.fr" title="Uno Game"></iframe>
+        // MAJ Header
+        authLink.innerText = "Mon compte";
+        authLink.href = "https://authentik.pxperfect.fr/if/user/#/settings";
+
+        // Injecter l'iframe
+        contentArea.innerHTML = `
+          <iframe 
+              src="https://uno.pxperfect.fr" 
+              style="width: 100%; height: 800px; border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; background: #000;"
+              allow="fullscreen; clipboard-write" 
+              title="UNO Multiplayer">
+          </iframe>
+          <div class="fullscreen-link-container">
+            <a href="https://uno.pxperfect.fr" target="_blank" class="fullscreen-link">
+              Jouer en plein écran
+            </a>
+          </div>
         `;
       } else {
-        // L'utilisateur n'est pas connecté : on affiche le verrou
-        gameWrapper.innerHTML = `
-          <div class="locked-overlay">
-            <div class="auth-card">
-              <h2 style="margin-bottom: 15px;">Accès Réservé</h2>
-              <p style="margin-bottom: 25px; color: #ccc;">Vous devez être connecté à votre compte PixelPerfect pour accéder au serveur Uno.</p>
-              <a href="https://authentik.pxperfect.fr/start?next=/html/uno-game.html" class="btn btn-primary">
-                Se connecter avec Authentik
-              </a>
-            </div>
+        // Afficher le bloc de verrouillage
+        contentArea.innerHTML = `
+          <div class="locked-card">
+            <div class="logo-icon" style="font-size: 40px; margin-bottom: 20px; filter: grayscale(1);">⬢</div>
+            <h2 style="margin-bottom: 15px;">Accès Réservé</h2>
+            <p style="color: var(--muted); margin-bottom: 30px; max-width: 500px; margin-left: auto; margin-right: auto;">
+                Cette application nécessite un compte PixelPerfect. Connectez-vous pour rejoindre la table de jeu.
+            </p>
+            <a href="/login"><button class="btn btn-primary">Se connecter</button></a>
           </div>
         `;
       }
     });
-
-    // Script pour le menu burger mobile
-    const burger = document.getElementById('burger-menu');
-    const nav = document.getElementById('nav-links');
-    burger.addEventListener('click', () => {
-      nav.classList.toggle('active');
-    });
   </script>
-
 </body>
 </html>

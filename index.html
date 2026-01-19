@@ -28,11 +28,13 @@
         <a href="html/apps.html">Applis</a>
         <a href="#">Chat</a>
         <script>
+          // On vérifie si le cookie existe OU si on est déjà sur une session active
           if (document.cookie.includes("authentik_proxy")) {
               document.write('<a href="html/myaccount.html">Mon Compte</a>');
           } else {
-              // On ajoute ?next= pour revenir sur la page myaccount après le login
-              document.write('<a href="https://authentik.pxperfect.fr/start?next=/html/myaccount.html">Connexion</a>');
+              // UTILISE BIEN L'URL COMPLETE CI-DESSOUS
+              const siteUrl = window.location.origin; 
+              document.write('<a href="https://authentik.pxperfect.fr/start?next=' + siteUrl + '/html/myaccount.html">Connexion</a>');
           }
         </script>
       </nav>
