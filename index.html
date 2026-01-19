@@ -28,15 +28,17 @@
         <a href="html/apps.html">Applis</a>
         <a href="#">Chat</a>
         <script>
-          // On vérifie si le cookie existe OU si on est déjà sur une session active
           if (document.cookie.includes("authentik_proxy")) {
               document.write('<a href="html/myaccount.html">Mon Compte</a>');
           } else {
-              // UTILISE BIEN L'URL COMPLETE CI-DESSOUS
-              const siteUrl = window.location.origin; 
-              document.write('<a href="https://authentik.pxperfect.fr/start?next=' + siteUrl + '/html/myaccount.html">Connexion</a>');
+              // On utilise le lien direct de ton application (Slug)
+              // Remplace 'uno-proxy-provider' par le SLUG exact de ton app si besoin
+              const authUrl = "https://authentik.pxperfect.fr/start/uno-proxy-provider/";
+              const nextParam = "?next=" + encodeURIComponent("https://pxperfect.fr/html/myaccount.html");
+              
+              document.write('<a href="' + authUrl + nextParam + '">Connexion</a>');
           }
-        </script>
+      </script>
       </nav>
     </div>
   </header>
