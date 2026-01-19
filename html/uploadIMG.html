@@ -210,9 +210,9 @@
             box-shadow: 0 10px 30px rgba(79, 172, 254, 0.3);
         }
 
-        .plan-image {
+        .plan-image img{
             width: 100%;
-            height: 200px;
+            height: 100%;
             background: rgba(79, 172, 254, 0.1);
             border-radius: 8px;
             margin-bottom: 15px;
@@ -252,8 +252,7 @@
         }
 
         .modal-image {
-            width: 100%;
-            height: auto;
+            height: 80vh;
             border-radius: 12px;
         }
 
@@ -338,21 +337,22 @@
             
             <div class="plans-grid">
                 <div class="plan-card" onclick="openModal(0)">
-                    <div class="plan-image">🗺️</div>
+                    <div class="plan-image"><img src="../sources/plans/rdc.jpg">🗺️</img></div>
                     <div class="plan-label">Rez-de-chaussée</div>
                 </div>
                 <div class="plan-card" onclick="openModal(1)">
-                    <div class="plan-image">🗺️</div>
+                    <div class="plan-image"><img src="../sources/plans/1etage.jpg">🗺️</img></div>
                     <div class="plan-label">1er étage</div>
                 </div>
                 <div class="plan-card" onclick="openModal(2)">
-                    <div class="plan-image">🗺️</div>
+                    <div class="plan-image"><img src="../sources/plans/2etage.jpg">🗺️</img></div>
                     <div class="plan-label">2ème étage</div>
                 </div>
                 <div class="plan-card" onclick="openModal(3)">
-                    <div class="plan-image">🗺️</div>
+                    <div class="plan-image"><img src="../sources/plans/3etage.jpg">🗺️</img></div>
                     <div class="plan-label">3ème étage</div>
                 </div>
+                
             </div>
         </div>
     </div>
@@ -360,7 +360,7 @@
     <div class="modal" id="modal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">×</button>
-            <div class="plan-image" style="width: 800px; height: 600px; font-size: 120px;">🗺️</div>
+            <div class="plan-image">🗺️</div>
         </div>
     </div>
 
@@ -378,10 +378,10 @@
     const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dt4pqmrtq/image/upload";
     const CLOUDINARY_UPLOAD_PRESET = "PXperfect_IMG_geogussr";
     const floorPlans = [
-        "../sources/plans/rdc.png",
-        "../sources/plans/etage1.png",
-        "../sources/plans/etage2.png",
-        "../sources/plans/etage3.png"
+        "../sources/plans/rdc.jpg",
+        "../sources/plans/1etage.jpg",
+        "../sources/plans/2etage.jpg",
+        "../sources/plans/3etage.jpg"
     ];
     let planImage = null;
     let ping = null;
@@ -525,10 +525,6 @@
 
         const x = ((e.clientX - rect.left) / rect.width) * 100;
         const y = ((e.clientY - rect.top) / rect.height) * 100;
-
-        ping.style.left = `${x}`;
-        ping.style.top = `${y}`;
-        ping.style.display = "block";
 
         coordinatesDisplay.textContent = `X: ${x.toFixed(2)}% | Y: ${y.toFixed(2)}%`;
     }
