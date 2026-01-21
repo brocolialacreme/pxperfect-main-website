@@ -520,13 +520,24 @@
     });
 
 
+
     function handlePlanClick(e) {
         const rect = planImage.getBoundingClientRect();
 
         const x = ((e.clientX - rect.left) / rect.width) * 100;
         const y = ((e.clientY - rect.top) / rect.height) * 100;
 
-        coordinatesDisplay.textContent = `X: ${x.toFixed(2)}% | Y: ${y.toFixed(2)}%`;
+        // Mise à jour de l'affichage
+        coordinatesDisplay.textContent = `X: ${x.toFixed(2)} | Y: ${y.toFixed(2)}`;
+        
+        // Mise à jour du ping visuel
+        ping.style.left = `${x}%`;
+        ping.style.top = `${y}%`;
+        ping.style.display = 'block';
+
+        // Remplissage automatique des inputs
+        document.getElementById('latitude').value = x.toFixed(2);
+        document.getElementById('longitude').value = y.toFixed(2);
     }
 </script>
 
