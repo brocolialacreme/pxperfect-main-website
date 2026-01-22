@@ -23,22 +23,10 @@
       </button>
 
       <nav id="nav-links">
-        <a href="index.html">Accueil</a>
-        <a href="#">Actualités</a>
-        <a href="html/apps.html">Applis</a>
-        <a href="#">Chat</a>
-        <script>
-          if (document.cookie.includes("authentik_proxy")) {
-              document.write('<a href="html/myaccount.html">Mon Compte</a>');
-          } else {
-              // On utilise le lien direct de ton application (Slug)
-              // Remplace 'uno-proxy-provider' par le SLUG exact de ton app si besoin
-              const authUrl = "https://authentik.pxperfect.fr/start/main-website-auth/";
-              const nextParam = "?next=" + encodeURIComponent("https://pxperfect.fr/html/myaccount.html");
-              
-              document.write('<a href="' + authUrl + nextParam + '">Connexion</a>');
-          }
-      </script>
+        <a href="https://pxperfect.fr">Accueil</a>
+        <a href="https://pxperfect.fr/apps">Applis</a>
+        <a href="https://pxperfect.fr/chat">Chat</a>
+        <a href="https://pxperfect.fr/compte">Mon compte</a>
       </nav>
     </div>
   </header>
@@ -49,7 +37,7 @@
         et jouer ensemble à des tas de jeux en ligne.
       </p>
       <div class="buttons">
-        <a href="html/apps.html" style="text-decoration: none;">
+        <a href="https://pxperfect.fr/apps" style="text-decoration: none;">
         <button class="btn btn-primary">Explorer</button>
         </a>
         <button class="btn btn-secondary">Suivre l'actualité</button>
