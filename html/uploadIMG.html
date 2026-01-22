@@ -207,6 +207,22 @@
             cursor: pointer;
         }
 
+        /* --- PING OPTIMISÉ (3x PLUS PETIT & CENTRÉ) --- */
+        #ping {
+            position: absolute;
+            width: 7px; /* 3 fois plus petit que 20px */
+            height: 7px;
+            background: #ff4d4d;
+            border: 1px solid white;
+            border-radius: 50%;
+            display: none;
+            pointer-events: none;
+            box-shadow: 0 0 10px rgba(255, 77, 77, 0.9);
+            /* Centrage absolu sur le point du clic */
+            transform: translate(-40%, -80%); 
+            z-index: 10;
+        }
+
         .spinner {
             display: inline-block;
             width: 20px;
@@ -302,7 +318,7 @@
             <button class="modal-close" onclick="closeModal()">&times;</button>
             <div style="position:relative; overflow: hidden; border-radius: 8px;">
                 <img id="planImage" src="" class="modal-image" alt="Plan détaillé">
-                <div id="ping" style="position:absolute; width:20px; height:20px; background:#ff4d4d; border: 2px solid white; border-radius:50%; transform:translate(-50%,-50%); display:none; pointer-events:none; box-shadow:0 0 15px rgba(255,77,77,0.8);"></div>
+                <div id="ping"></div>
             </div>
             <div id="coordinatesDisplay" style="margin-top:15px; text-align:center; font-family:monospace; color:#4facfe;">
                 Cliquez sur le lieu exact pour valider
@@ -330,7 +346,6 @@
         "../sources/plans/3etage.jpg"
     ];
 
-    // --- LOGIQUE UPLOAD ---
     uploadArea.onclick = () => fileInput.click();
 
     fileInput.onchange = (e) => {
@@ -358,8 +373,6 @@
 
     form.onsubmit = async (e) => {
         e.preventDefault();
-        
-        // UI Loading
         submitBtn.disabled = true;
         submitBtn.innerHTML = `<span class="spinner"></span>Envoi en cours...`;
 
@@ -385,21 +398,10 @@
         }
     };
 
-    // --- LOGIQUE PLANS (MAJ : Remplissage auto de l'étage) ---
-
     function openModal(floorIndex) {
-        // 1. On affiche le bon plan dans la modale
         document.getElementById('planImage').src = floorPlans[floorIndex];
         modal.classList.add('active');
-
-        // 2. REMPLISSAGE AUTO DE L'ÉTAGE
-        // On récupère le select et on change sa valeur pour correspondre à l'index (0, 1, 2 ou 3)
-        const selectEtage = document.getElementById('etage');
-        selectEtage.value = floorIndex;
-
-        // Optionnel : On ajoute une petite animation visuelle sur le select pour montrer qu'il a changé
-        selectEtage.style.borderColor = "#00f2fe";
-        setTimeout(() => { selectEtage.style.borderColor = "rgba(79, 172, 254, 0.3)"; }, 1000);
+        document.getElementById('etage').value = floorIndex;
     }
 
     function closeModal() { 
@@ -413,17 +415,15 @@
         const x = ((e.clientX - rect.left) / rect.width) * 100;
         const y = ((e.clientY - rect.top) / rect.height) * 100;
 
-        // Mise à jour visuelle du curseur (ping)
+        // Placement du ping (le centrage est géré par transform: translate(-50%, -50%) dans le CSS)
         const ping = document.getElementById('ping');
         ping.style.left = x + '%';
         ping.style.top = y + '%';
         ping.style.display = 'block';
 
-        // Remplissage des inputs de coordonnées
         document.getElementById('latitude').value = x.toFixed(2);
         document.getElementById('longitude').value = y.toFixed(2);
         
-        // Feedback textuel
         document.getElementById('coordinatesDisplay').textContent = 
             `Position enregistrée : X=${x.toFixed(1)}% | Y=${y.toFixed(1)}%`;
     };
