@@ -417,7 +417,7 @@
 
         // Placement du ping (le centrage est géré par transform: translate(-50%, -50%) dans le CSS)
         const ping = document.getElementById('ping');
-        ping.style.left = x + '%';
+        ping.style.left = ((e.clientX - rect.left) / rect.width) * 100 + '%';
         ping.style.top = y + '%';
         ping.style.display = 'block';
 
