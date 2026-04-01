@@ -412,12 +412,12 @@
         const rect = this.getBoundingClientRect();
         
         // Calcul des coordonnées relatives en %
-        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const x = ((((e.clientX - rect.left) / rect.width) * 100) - 20) * (100/60);
         const y = ((e.clientY - rect.top) / rect.height) * 100;
 
         // Placement du ping (le centrage est géré par transform: translate(-50%, -50%) dans le CSS)
         const ping = document.getElementById('ping');
-        ping.style.left = x + '%';
+        ping.style.left = ((e.clientX - rect.left) / rect.width) * 100 + '%';
         ping.style.top = y + '%';
         ping.style.display = 'block';
 
