@@ -54,19 +54,6 @@
   <footer>© 2026 · PixelPerfect — Hosted by PM - contact@pxperfect.fr</footer>
 
   <script src="js/script.js"></script>
-  <script src="https://www.google.com/recaptcha/api.js?render=6LcrvqEsAAAAAKBpQpwOfZWne8dWgcV7ZSkAdksh"></script>
-
-<script>
-  grecaptcha.ready(function() {
-      grecaptcha.execute('6LcrvqEsAAAAAKBpQpwOfZWne8dWgcV7ZSkAdksh', {action: 'homepage'}).then(function(token) {
-          document.getElementById('recaptcha_token').value = token;
-      });
-  });
-</script>
-
-<form action="/login" method="POST">
-    <input type="hidden" id="recaptcha_token" name="recaptcha_token">
-    <button type="submit">Jouer !</button>
-</form>
+  
 </body>
 </html>
